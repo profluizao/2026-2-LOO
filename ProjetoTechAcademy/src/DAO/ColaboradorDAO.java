@@ -16,22 +16,42 @@ public class ColaboradorDAO extends AbsGenericDAO<Colaborador>{
 
     @Override
     public Colaborador delete(Colaborador apagado) {
-        // TODO Auto-generated method stub
-        return null;
+        int codigoProcurado = apagado.getCodigo();
+        return this.deletePorID(codigoProcurado);
     }
 
     @Override
     public Colaborador readOne(int codigo) {
-        // TODO Auto-generated method stub
+        for (Colaborador item : this.repositorio) {
+            if (item.getCodigo() == codigo){
+                return item;
+            }
+        }
         return null;
     }
 
     @Override
     public Colaborador update(Colaborador alterado) {
-        // TODO Auto-generated method stub
+        int codigoProcurado = alterado.getCodigo();
+        Colaborador original = this.readOne(codigoProcurado);
+        if (original != null){
+            int indice = this.repositorio.indexOf(original);
+            this.repositorio.set(indice, alterado);
+            return alterado;
+        }
         return null;
     }
     
+    public Colaborador deletePorID(int codigo){
+        Colaborador original = this.readOne(codigo);
+        if (original != null){
+            this.repositorio.remove(original);
+            return original;
+        }
+        return null;
+    }
+
+
     public ColaboradorDAO(){
         this.repositorio = new ColaboradorFakeDB().getDados();
     }
