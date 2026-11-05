@@ -18,7 +18,12 @@ public abstract class AbsMenu {
         System.out.println("9 - Sair");
         System.out.print("Selecione uma opção: ");
         int escolha = this.scan.nextInt();
+        this.scan.nextLine();
         return escolha;
     }
 
+    protected void pausar(){
+        System.out.println("Clique <ENTER> para continuar...");
+        this.scan.nextLine();
+    }
 }

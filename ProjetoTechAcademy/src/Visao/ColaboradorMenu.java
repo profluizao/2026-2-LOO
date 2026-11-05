@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import Dominio.Colaborador;
 import Servico.ColaboradorServ;
+import Tools.Util;
 
 public class ColaboradorMenu extends AbsMenu {
 
@@ -23,6 +24,7 @@ public class ColaboradorMenu extends AbsMenu {
                     break;
                 case 2:
                     this.pesquisarPorCodigo();
+                    this.pausar();
                     break;
                 case 3:
                     this.incluir();
@@ -38,8 +40,10 @@ public class ColaboradorMenu extends AbsMenu {
                     break;
                 default:
                     System.out.println("OPA, OPÇÃO ERRADA!!!");
+                    this.pausar();
                     break;
             }
+            Util.limparTerminal();
         }
     }
 
@@ -56,9 +60,15 @@ public class ColaboradorMenu extends AbsMenu {
         System.out.println("***** PESQUISAR POR CÓDIGO *****");
         System.out.print("Digite o código: ");
         int codigo = this.scan.nextInt();
+        this.scan.nextLine();
         Colaborador colab = this.servico.buscar(codigo);
-        colab.exibir();
-        this.colabSelecionado = colab;
+        if(colab != null){
+            colab.exibir();
+            this.colabSelecionado = colab;
+        }
+        else{
+            System.out.println("ERRO - código inválido");
+        }
     }
 
     private void incluir(){
@@ -79,6 +89,11 @@ public class ColaboradorMenu extends AbsMenu {
         System.out.println("\n\n");
         System.out.println("ALTERAR");
         this.pesquisarPorCodigo();
+        if (this.colabSelecionado == null){
+            System.out.println("ERRO - não posso prosseguir com alteração.");
+            this.pausar();
+            return;
+        }
         int opcao = 0;
         while (opcao != 9) {
             System.out.println("O que vc deseja alterar?");
@@ -122,6 +137,11 @@ public class ColaboradorMenu extends AbsMenu {
         System.out.println("\n\n");
         System.out.println("***** EXCLUIR *****");
         this.pesquisarPorCodigo();
+        if (this.colabSelecionado == null){
+            System.out.println("ERRO - não posso prosseguir com exclusão.");
+            this.pausar();
+            return;
+        }
         System.out.print("Confirma exclusão (1-Sim / 2-Não)? ");
         int opcao = this.scan.nextInt();
         if (opcao == 1){
